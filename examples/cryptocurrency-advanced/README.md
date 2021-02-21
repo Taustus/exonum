@@ -1,3 +1,11 @@
+# Programming smart contracts in a distributed ledger system
+### Homework
+
+This homework was done by Boris Belov and Sergey Babikov. 
+We've commited two tasks:
+- Task 1 (made by Boris Belov)
+- Task 2 (made by Sergey Babikov)
+---
 # Cryptocurrency Advanced: Service with Data Proofs
 
 The extended version of the

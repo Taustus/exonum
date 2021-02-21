@@ -39,6 +39,17 @@ message TxSendApprove {
   exonum.crypto.Hash approve_address = 4;
 }
 
+message TxApprove {
+  // Address of receiver's wallet.
+  exonum.crypto.Hash to = 1;
+  // Amount of currency to transfer.
+  uint64 amount = 2;
+  // Auxiliary number to guarantee non-idempotence of transactions.
+  uint64 seed = 3;
+  // approver's address
+  exonum.crypto.Hash from = 4;
+}
+
 // Issue `amount` of the currency to the `wallet`.
 message Issue {
   // Issued amount of currency.

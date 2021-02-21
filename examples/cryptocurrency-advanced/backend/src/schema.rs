@@ -57,6 +57,10 @@ impl<T: Access> SchemaImpl<T> {
     pub fn wallet(&self, address: Address) -> Option<Wallet> {
         self.public.wallets.get(&address)
     }
+
+    pub fn confirmed(&self, hash: Hash) -> Option<TxSendApprove> {
+        self.public.confirmed_transaction.get(&hash)
+    }
 }
 
 impl<T> SchemaImpl<T>
@@ -93,14 +97,19 @@ where
     /// Decreases frozen of the wallet and append new record to its history.
     pub fn decrease_frozen_balance(&mut self,
                                    wallet: Wallet,
-                                   frozen_balance_change: i64,
+                                   frozen_balance_change: u64,
                                    transaction: Hash) {
         let mut history = self.wallet_history.get(&wallet.owner);
         history.push(transaction);
         let history_hash = history.object_hash();
 
-        let wallet_frozen_balance = (wallet.frozen_balance as i64);
-        let wallet = wallet.set_frozen_balance((wallet_frozen_balance - frozen_balance_change) as u64, &history_hash);
+        let wallet_frozen_balance = wallet.frozen_balance;
+
+        let dif_froz = wallet_frozen_balance - frozen_balance_change;
+        let dif_bal = wallet.balance - frozen_balance_change;
+
+        let wallet = wallet.set_frozen_balance(dif_froz, &history_hash);
+        let wallet = wallet.set_balance(dif_bal, &history_hash);
 
         let wallet_key = wallet.owner;
         self.public.wallets.put(&wallet_key, wallet);
